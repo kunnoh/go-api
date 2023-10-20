@@ -1,15 +1,15 @@
 services:
-  backend-api:
+  api:
     build:
-      context: backend-api
+      context: api
       target: builder
     secrets:
       - APP_DB_PASSWORD
     depends_on:
-      database:
+      db:
         condition: service_healthy
 
-  database:
+  db:
     image: postgres
     restart: always
     user: postgres
@@ -28,7 +28,7 @@ services:
       timeout: 5s
       retries: 5
 
-  web-proxy:
+  web:
     image: nginx
     volumes:
       - type: bind
@@ -38,7 +38,7 @@ services:
     ports:
       - 80:80
     depends_on: 
-      - backend-api
+      - api
 
 volumes:
   db-data:
